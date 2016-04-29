@@ -16,5 +16,14 @@ namespace TestingDbProject
                     source = source.Skip(chunksize);
                 }
             }
+
+        public static IEnumerable<IEnumerable<FakeObject>> Chunk<FakeObject>(this IEnumerable<FakeObject> source, int chunksize, int chunkNumber)
+        {
+            for (int i = 0; i < chunkNumber; i++)
+            {
+                yield return source.Take(chunksize);
+                source = source.Skip(chunksize);
+            }
+        }
     }
 }

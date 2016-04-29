@@ -21,7 +21,7 @@ namespace Tests
             using (SpreadsheetDocument xl = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook))
             {
                 xl.CompressionOption = CompressionOption.SuperFast;
-                int rowNumber = 80000;
+                int rowNumber = 50000;
                 FakeDbContext db = new FakeDbContext();
                 List<FakeObject> objects = db.Objects.Take(rowNumber).ToList();
                 List<OpenXmlAttribute> oxa;
