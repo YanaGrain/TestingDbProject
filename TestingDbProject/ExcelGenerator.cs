@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Packaging;
@@ -11,62 +12,48 @@ namespace TestingDbProject
 {
     public class ExcelGenerator
     {
-        protected SpreadsheetDocument Document { get; set; }
-        protected WorksheetPart WorksheetPart { get; set; }
-        protected OpenXmlWriter Writer { get; set; }
-        protected FileStream OutputStream { get; set; }
-        protected Cell Cell { get; set; }
-
-        protected string FilePath = Directory.GetCurrentDirectory() + @"\Excel";
-        
+        public string[] headerColumns;
 
         public ExcelGenerator()
         {
-            this.OutputStream = new FileStream(this.FilePath, FileMode.OpenOrCreate);
-
-            this.Document = SpreadsheetDocument.Create(this.OutputStream, SpreadsheetDocumentType.Workbook);
-            this.Document.CompressionOption = CompressionOption.SuperFast;
-
-            this.Document.AddWorkbookPart();
-            this.WorksheetPart = this.Document.WorkbookPart.AddNewPart<WorksheetPart>();
-
-            //var stylesPart = this.Document.WorkbookPart.AddNewPart<WorkbookStylesPart>();
-            //var styles = new ReportExcelStyles();
-            //styles.Save(stylesPart);
-
-            this.Writer = OpenXmlWriter.Create(this.WorksheetPart);
-
+            headerColumns = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
         }
 
-        public static OpenXmlAttribute GetNewRowAttribute(long rowIndex)
+        public Row CreateContentRow(long rowIndex, List<string> properties)
         {
-            return new OpenXmlAttribute("r", null, rowIndex.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public static void WriteNewRow(List<OpenXmlAttribute> attributes, OpenXmlWriter writer)
-        {
-            writer.WriteStartElement(new Row(), attributes);
-        }
-
-        public void WriteGeneralCell(OpenXmlWriter writer, string header, int rowIndex, string value, uint? styleIndex = null)
-        {
-            this.ResetCell();
-
-            this.Cell.SetAttribute(new OpenXmlAttribute(string.Empty, "t", string.Empty, "inlineStr"));
-            this.Cell.CellReference = header + rowIndex;
-            this.Cell.InlineString.Text.Text = value ?? string.Empty;
-
-            if (styleIndex.HasValue)
+            //Create the new row.
+            Row row = new Row();
+            row.RowIndex = (UInt32)rowIndex;
+            //First cell is a text cell, so create it and append it.
+            Cell firstCell = CreateTextCell(headerColumns[0], properties[0], rowIndex);
+            row.AppendChild(firstCell);
+            //Create the cells that contain the data.
+            for (int i = 1; i < headerColumns.Length; i++)
             {
-                this.Cell.StyleIndex = styleIndex.Value;
+                Cell c = new Cell();
+                c.CellReference = headerColumns[i] + rowIndex;
+                CellValue v = new CellValue();
+                v.Text = properties[i];
+                c.DataType = new EnumValue<CellValues>(CellValues.String);
+                c.AppendChild(v);
+                row.AppendChild(c);
             }
-
-            WriteCellSafe(this.Cell, writer);
+            return row;
         }
 
-        private void ResetCell()
+        private Cell CreateTextCell(string header, string text, long index)
         {
-            Cell.StyleIndex = null;
+            //Create a new inline string cell.
+            Cell c = new Cell();
+            c.DataType = CellValues.String;
+            c.CellReference = header + index;
+            //Add text to the text cell.
+            InlineString inlineString = new InlineString();
+            Text t = new Text();
+            t.Text = text;
+            inlineString.AppendChild(t);
+            c.AppendChild(inlineString);
+            return c;
         }
     }
 }
