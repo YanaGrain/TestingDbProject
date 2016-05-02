@@ -67,9 +67,14 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DbInitializer.cs" />
+    <Compile Include="ExcelBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExcelBuilder\ExcelBuilder.csproj">
+      <Project>{29bc00c5-0666-40aa-8cad-2776228ad9c5}</Project>
+      <Name>ExcelBuilder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestingDbProject\TestingDbProject.csproj">
       <Project>{74c1a719-ec30-4afd-a60c-84f8a0dbae64}</Project>
       <Name>TestingDbProject</Name>

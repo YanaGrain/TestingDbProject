@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EntityFramework.Utilities;
+using ExcelBuilder;
 
 namespace TestingDbProject
 {
     public class BulkInsertToDb
     {
-        public void BulkInsert(IEnumerable<FakeObject> entities, int subBatchLength = 1, string warnMessagePrefix = "")
+        public void BulkInsert(IEnumerable<ExampleObject> entities, int subBatchLength = 1, string warnMessagePrefix = "")
         {
             if (subBatchLength == 1)
             {
@@ -22,16 +23,16 @@ namespace TestingDbProject
             {
                 if (entities != null)
                 {
-                    var enumerable = entities as FakeObject[] ?? entities.ToArray();
+                    var enumerable = entities as ExampleObject[] ?? entities.ToArray();
                     var chunkSize = enumerable.Count() / subBatchLength + 1;
                     enumerable.Chunk(chunkSize).ToList().ForEach(x => BulkInsert(x, warnMessagePrefix));
                 }
             }
         }
 
-        protected void BulkInsert(IEnumerable<FakeObject> entities, string warnMessagePrefix = "")
+        protected void BulkInsert(IEnumerable<ExampleObject> entities, string warnMessagePrefix = "")
         {
-            FakeDbContext db = new FakeDbContext();
+            ExampleDbContext db = new ExampleDbContext();
             if (entities == null)
                 return;
 

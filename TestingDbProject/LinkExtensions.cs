@@ -8,7 +8,7 @@ namespace TestingDbProject
 {
    public static class LinkExtensions
     {
-        public static IEnumerable<IEnumerable<FakeObject>> Chunk<FakeObject>(this IEnumerable<FakeObject> source, int chunksize)
+        public static IEnumerable<IEnumerable<ExampleObject>> Chunk<ExampleObject>(this IEnumerable<ExampleObject> source, int chunksize)
             {
                 while (source.Any())
                 {

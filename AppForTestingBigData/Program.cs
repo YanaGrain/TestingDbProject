@@ -49,14 +49,29 @@ namespace AppForTestingBigData
                 xl.AddWorkbookPart();
                 WorksheetPart wsp = xl.WorkbookPart.AddNewPart<WorksheetPart>();
 
+
+
                 using (var oxw = OpenXmlWriter.Create(wsp))
                 {
                     oxw.WriteStartElement(new Worksheet());
                     oxw.WriteStartElement(new SheetData());
 
-                    int chunkSize = 10000;
+                    int chunkSize = 40000;
                     var ostatok = rowNumber%chunkSize;
                     int chunksCount = ostatok == 0 ? (rowNumber / chunkSize) : (rowNumber / chunkSize + 1);
+                    List<string> headers = new List<string>();
+                    headers.Add("1");
+                    headers.Add("2");
+                    headers.Add("3");
+                    headers.Add("4");
+                    headers.Add("5");
+                    headers.Add("6");
+                    headers.Add("7");
+                    headers.Add("8");
+                    headers.Add("9");
+                    headers.Add("10");
+                    headers.Add("11");
+                    WriteRow(headers, oxw, 1);
                     try
                     {
                         Enumerable.Range(0, chunksCount).ToList().ForEach(number =>
@@ -72,7 +87,7 @@ namespace AppForTestingBigData
                                     .Skip(skipNumber + number*chunkSize)
                                     .Take(currentChunkSize)
                                     .ToList();
-                            WriteRow(chunk, oxw, number*chunkSize+1);
+                            WriteRow(chunk, oxw, number*chunkSize+2);
                         });
                     }
                     catch (Exception e)
@@ -159,6 +174,22 @@ namespace AppForTestingBigData
                 oxw.WriteEndElement();
                 i++;
             }
+        }
+
+        static void WriteRow(List<string> columns, OpenXmlWriter writer, int rowNumber)
+        {
+            List<OpenXmlAttribute> attributes = new List<OpenXmlAttribute>();
+            attributes.Add(new OpenXmlAttribute("r", null, rowNumber.ToString()));
+            writer.WriteStartElement(new Row(), attributes);
+            foreach (string column in columns)
+            {
+                attributes = new List<OpenXmlAttribute>();
+                attributes.Add(new OpenXmlAttribute("t", null, "str"));
+                writer.WriteStartElement(new Cell(), attributes);
+                writer.WriteElement(new CellValue(column));
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
         }
     }
 }

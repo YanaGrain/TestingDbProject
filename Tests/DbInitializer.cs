@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using ExcelBuilder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestingDbProject;
 
@@ -17,13 +18,13 @@ namespace Tests
             var db = new BulkInsertToDb();
             //FakeObjects.ToList().ForEach(l => db.BulkInsert(l));
 
-            foreach (var l in FakeObjects)
+            foreach (var l in ExampleObjects)
             {
                 db.BulkInsert(l);
             }
         }
 
-        private IEnumerable<IEnumerable<FakeObject>> FakeObjects
+        private IEnumerable<IEnumerable<ExampleObject>> ExampleObjects
         {
             get
             {
@@ -31,7 +32,7 @@ namespace Tests
 
                 for (int i = 0; i < 200; i++)
                 {
-                    List<FakeObject> objects = new List<FakeObject>();
+                    List<ExampleObject> objects = new List<ExampleObject>();
 
                     for (int j = 0; j < 10000; j++)
                     {
@@ -43,9 +44,9 @@ namespace Tests
             }
         }
 
-        private FakeObject BuildObject(Random rnd)
+        private ExampleObject BuildObject(Random rnd)
         {
-            return new FakeObject()
+            return new ExampleObject()
             {
                 Age = rnd.Next(100),
                 City = Guid.NewGuid().ToString(),
