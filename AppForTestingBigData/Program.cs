@@ -22,27 +22,12 @@ namespace AppForTestingBigData
         private static readonly object syncLock = new object();
         static void Main(string[] args)
         {
-            //try
-            //{
-            //    log.Trace("Version: {0}", Environment.Version.ToString());
-            //    log.Trace("OS: {0}", Environment.OSVersion.ToString());
-            //    log.Trace("Command: {0}", Environment.CommandLine.ToString());
-
-            //    NLog.Targets.FileTarget tar = (NLog.Targets.FileTarget)LogManager.Configuration.FindTargetByName("run_log");
-            //    tar.DeleteOldFileOnStartup = false;
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine("Ошибка работы с логом!" + e.Message);
-            //}
-
-            int threadNumber = RandomNumber(5, 10);
-            
+            int threadNumber = RandomNumber(30, 50);
 
             log.Info("Threads: " + threadNumber);
-            Console.WriteLine(threadNumber);
+            Console.WriteLine("Threads: " + threadNumber);
 
-            Parallel.For(0, 2, CreateExcelReport);
+            Parallel.For(0, 1, CreateExcelReport);
         }
 
         static void CreateExcelReport(int x)
@@ -74,7 +59,7 @@ namespace AppForTestingBigData
                     int chunksCount = ostatok == 0 ? (rowNumber / chunkSize) : (rowNumber / chunkSize + 1);
                     try
                     {
-                        Enumerable.Range(0, chunksCount - 1).ToList().ForEach(number =>
+                        Enumerable.Range(0, chunksCount).ToList().ForEach(number =>
                         {
                             var currentChunkSize = number == chunksCount - 1 ? ostatok : chunkSize;
                             FakeDbContext db = new FakeDbContext();
@@ -87,7 +72,7 @@ namespace AppForTestingBigData
                                     .Skip(skipNumber + number*chunkSize)
                                     .Take(currentChunkSize)
                                     .ToList();
-                            WriteRow(chunk, oxw);
+                            WriteRow(chunk, oxw, number*chunkSize+1);
                         });
                     }
                     catch (Exception e)
@@ -134,9 +119,8 @@ namespace AppForTestingBigData
             }
         }
 
-        static void WriteRow(IEnumerable<FakeObject> objects, OpenXmlWriter oxw)
+        static void WriteRow(IEnumerable<FakeObject> objects, OpenXmlWriter oxw, int i)
         {
-            int i = 1;
             List<OpenXmlAttribute> oxa;
             foreach (var fakeObject in objects)
             {
@@ -165,7 +149,7 @@ namespace AppForTestingBigData
 
                     oxw.WriteStartElement(new Cell(), oxa);
 
-                    oxw.WriteElement(new CellValue(propValues[j].ToString()));
+                    oxw.WriteElement(new CellValue(Convert.ToString(propValues[j])));
 
                     // this is for Cell
                     oxw.WriteEndElement();
