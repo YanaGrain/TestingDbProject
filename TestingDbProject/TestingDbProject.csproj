@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkInsertToDb.cs" />
-    <Compile Include="ExcelGenerator.cs" />
     <Compile Include="FakeDbContext.cs" />
     <Compile Include="FakeObject.cs" />
     <Compile Include="LinkExtensions.cs" />

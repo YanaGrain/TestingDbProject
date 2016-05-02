@@ -20,7 +20,7 @@ namespace AppForTestingBigData
         {
             int threadNumber = RandomNumber(10, 15);
             Console.WriteLine(threadNumber);
-            Parallel.For(0, 100, CreateExcelReport);
+            Parallel.For(0, 50, CreateExcelReport);
         }
 
         static void CreateExcelReport(int x)
