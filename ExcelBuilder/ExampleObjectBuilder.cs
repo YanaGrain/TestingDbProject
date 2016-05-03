@@ -41,10 +41,11 @@ namespace ExcelBuilder
             
             List<Row> rows = new List<Row>();
             var props = typeof(ExampleObject).GetProperties();
-            Row row = new Row();
-            row.Columns = new List<string>();
+            Row row;
             foreach (var obj in objects)
             {
+                row = new Row();
+                row.Columns = new List<string>();
                 foreach (var prop in props)
                 {
                     string value = prop.GetValue(obj, null).ToString();

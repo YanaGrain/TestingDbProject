@@ -64,24 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkInsertToDb.cs" />
-    <Compile Include="FakeDbContext.cs" />
-    <Compile Include="FakeObject.cs" />
     <Compile Include="LinkExtensions.cs" />
-    <Compile Include="Migrations\201604271143539_initial.cs" />
-    <Compile Include="Migrations\201604271143539_initial.Designer.cs">
-      <DependentUpon>201604271143539_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201604271143539_initial.resx">
-      <DependentUpon>201604271143539_initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
